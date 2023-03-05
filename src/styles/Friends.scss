@@ -1,0 +1,29 @@
+.pageFriends {
+    background-color: white;
+    min-height: calc(100vh - 100px);
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    // justify-content: center;
+    // align-items: center;
+    padding: 6%;
+    .addFriend {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+    }
+    .friend {
+        display: flex;
+        padding: 1.2%;
+        gap: 20px;
+        flex-direction: column;
+        //width: 50%;
+        border: solid 1px lightgray;
+        border-radius: 20px;
+        margin: 30px;
+        .initialInfo {
+            display: flex;
+            gap: 20px;
+        }
+    }
+  }
