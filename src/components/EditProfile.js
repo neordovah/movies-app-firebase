@@ -1,13 +1,14 @@
 import React, {useState} from 'react'
 import "../styles/EditProfile.scss"
-import { getCookie, setCookie } from '../handle-user-cookie'
-import { updateUser, getUsers, getUser } from '../firebase-users'
+import { updateUser, getUser } from '../firebase-users'
+import { useContext } from 'react';
+import Context from '../context';
 
 function EditProfile(props) {
 
- const [user, setUser] = useState(getCookie())
+  let [user, setUser] = useContext(Context)
+
   const [name, setName] = useState(user.name)
-  const [username, setUsername] = useState(user.username)
   const [password, setPassword] = useState(user.password)
   const [modify, setModify] = useState(false)
   const [alert, setAlert] = useState({state: false, msg: '\u00A0'})
@@ -20,12 +21,13 @@ function EditProfile(props) {
 
   const handleSave = async (e) => {
     e.preventDefault()
+    props.changeName(name)
+    let currUser = user
+    currUser.name = name
+    currUser.password = password
+    setUser(currUser)
+    updateUser(user.id, user)
     setModify(!modify)
-    updateUser(user.id, name, password)
-    let currUser = await getUser(user.id)
-    props.setUserState(currUser)
-    console.log(currUser)
-    setCookie(currUser)
     setAlert({state: true, msg: "Changes have been saved!"})
     setTimeout(() => {
       setAlert(false)
@@ -49,8 +51,6 @@ function EditProfile(props) {
       <form>
           <label>Name
           <input type="text" readOnly={!modify} name="name" value={name} autoComplete="off" onChange={(e) => setName(e.target.value)} /></label>
-          {/* <label>Username
-          <input type="text" readOnly={!modify} name="username" value={name} autoComplete="off" onChange={(e) => setUsername(e.target.value)} /></label> */}
           <label>Password
           <input type="password" readOnly={!modify} name="password" value={password} autoComplete="off" onChange={(e) => setPassword(e.target.value)} /></label>
           {!modify ?

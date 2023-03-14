@@ -3,11 +3,15 @@ import { useState } from 'react'
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/Login.scss"
 import {getUsers} from "../firebase-users"
-import { setCookie } from "../handle-user-cookie";
+import { useContext } from 'react';
+import Context from '../context';
+import { setCookie } from '../handle-user-cookie';
 
-function Login(props) {
+function Login() {
 
   let navigate = useNavigate()
+
+  let [user, setUser] = useContext(Context)
 
   const [username, setUsername] = useState(null)
   const [password, setPassword] = useState(null)
@@ -24,27 +28,20 @@ function Login(props) {
   let foundUser = null
   const checkUser = async () => {
     await getUsers().then((data) => data.map(user => {
-      if(user.username == username) {
+      if(user.username === username) {
         foundUser = user
       }
     }))
-
   }
-
 
   const handleLogin = async (e) => {
     e.preventDefault()
 
-    await checkUser()
-    //console.log(foundUser.stringify())
-         if(foundUser && foundUser.password == password) {
-          //props.setUser(foundUser)
-          setCookie(foundUser)
-          //Cookies.set("user", JSON.stringify(foundUser))
-          // let userFromCookies = Cookies.get("user")
-          // console.log(JSON.parse(userFromCookies))
-          props.setUserState(foundUser)
+     await checkUser()
+         if(foundUser && foundUser.password === password) {
+          setUser(foundUser)
            navigate("/")
+           setCookie(foundUser.id)
          }
                 else if(!username || !password) {
                   setAlert({state: true, msg: "All values must be provided!"})
@@ -64,10 +61,6 @@ function Login(props) {
                       setAlert(false)
                   }, 3000)
                 }
-                
-          //  })
-
-        // } 
   }
 
   return (
@@ -75,8 +68,7 @@ function Login(props) {
       <div className="black"></div>
       <div className="auth">
         <div id="alert" style={style}>{alert.msg}</div>  
-        <form>
-                
+        <form>  
               <label>Username
               <input type="text" name="username" autoComplete="off" onChange={(e) => setUsername(e.target.value)} /></label>
               <label>Password

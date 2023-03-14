@@ -1,15 +1,14 @@
 import React, { useEffect, useState, useContext } from "react";
-//import styles from "../../styles/Navbar.module.scss"
 import { AiOutlineSearch, AiOutlineStar } from "react-icons/ai"
 import { Link } from "react-router-dom";
 import "../../styles/Navbar.scss"
-//import Context from "../../context";
+import Context from "../../context";
+import { setCookie } from "../../handle-user-cookie";
 import Cookies from "js-cookie";
-import { getCookie } from "../../handle-user-cookie";
 
-function  Navbar(props) {
+function  Navbar() {
 
-  const user = getCookie()
+  let [user, setUser] = useContext(Context)
 
   const [width, setWidth] = useState(null)
   const [userProfile, setUserProfile] = useState(false)
@@ -17,8 +16,8 @@ function  Navbar(props) {
 
   const logout = async () => {
     try {
-        props.setUserState(null)
-        Cookies.remove("user")
+        setUser(null)
+        Cookies.remove('id')
     } catch(err) {
         console.log(err)
     }
@@ -32,6 +31,10 @@ function  Navbar(props) {
   useEffect(() => {
     getWindowDimensions()
     window.addEventListener('resize', getWindowDimensions)
+    // getUser(user.id).then(data => {
+    //   setUsername(data.name)
+    // })
+    
   }, [])
 
   useEffect(() => {
@@ -44,7 +47,7 @@ function  Navbar(props) {
     color: "white",
     cursor: "pointer",
   } 
-
+  
 
   return (
     <div className="navbar">
@@ -68,7 +71,6 @@ function  Navbar(props) {
             </div>
           :null}
       
-{/* <span> */}
 <span onMouseLeave={() => setUserProfile(false)} >
     <span className="userProfile"  onMouseEnter={() => setUserProfile(true)} >
       {width ? <p className="username">{user?.name}</p> : null}
@@ -76,7 +78,7 @@ function  Navbar(props) {
     </span>
     { userProfile ?
       <div className="dropdownMenu">
-        <ul onMouseLeave={() => setUserProfile(false)}>
+        <ul>
           {!width ? <li><Link to="/">Home page</Link></li> : null}
           <li><Link to="/editProfile">Edit Profile</Link></li>
           <li><Link to="/friends">Friends</Link></li>

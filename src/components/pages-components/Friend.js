@@ -1,27 +1,52 @@
 import React, { useState } from 'react'
 import "../../styles/Friends.scss"
-import { updateUserFriends } from '../../firebase-users'
-import { getCookie, setCookie } from '../../handle-user-cookie'
+import Context from '../../context';
+import { useContext } from 'react';
+import { updateUser, getUsers } from '../../firebase-users'
 
 function Friend(props) {
 
 const [infoButton, setInfoButton] = useState(false)
 
-    let user = getCookie()
+let [user, setUser] = useContext(Context)
+let friend = null
 
-    const handleDelete = (e) => {
+    const findFriend = async () => {
+    await getUsers().then((data) => data.map(userFriend => {
+      if(userFriend.username === props.friend) {
+        friend = userFriend
+      }
+    }))
+  }
+
+    const handleDelete = async(e) => {
         e.preventDefault()
-
-        let friends = user.friends.filter(friend => {
-            if (friend !== props.friend) {
+        await findFriend()
+        //console.log(friend)
+        props.changeName("1")
+        let newFriends = user.friends?.filter(friend => {
+           // console.log(friend, props.friend)
+            if (friend != props.friend) {
                 return friend
             }
         })
-        props.setFriends(friends)
-        user = {...user, friends}
-        setCookie(user)
-        updateUserFriends(user.id, friends)
-
+        let friendFriends = friend.friends?.filter(friend => {
+            console.log(friend, user.username)
+            if (friend != user.username) {
+                return friend
+            }
+        })
+       // console.log(newFriends, friendFriends)
+        props.setFriends(newFriends)
+        let newUser = user
+        newUser.friends = newFriends
+        setUser(newUser)
+        let newFriend = friend
+        newFriend.friends = friendFriends
+        updateUser(user.id, newUser)
+        updateUser(friend.id, newFriend)
+       // console.log(user, friend)
+        props.setUser(newUser)
     }
 
   return (

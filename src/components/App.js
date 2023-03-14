@@ -1,5 +1,5 @@
-import React, { useState, Navigate, useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import Footer from "./pages-components/Footer"
 import Navbar from "./pages-components/Navbar"
 import Homepage from "./Homepage";
@@ -12,42 +12,51 @@ import PageNotFound from "./PageNotFound";
 import Context from "../context";
 import PrivateRoutes from "../PrivateRoutes"
 import PrivateRoutesLogged from "../PrivateRoutesLogged"
-import { getCookie } from "../handle-user-cookie";
+import {getCookie} from "../handle-user-cookie"
+import { getUser } from "../firebase-users";
+import AboutMovie from "./pages-components/AboutMovie";
 
 function App() {
 
-  let user = getCookie()
-  const [userState, setUserState] = useState(null)
-
+  const [user, setUser] = useState(null)
+  const [name, setName] = useState("")
+  
+  const id = getCookie()
+  const asyncGetUserCookie = async () => {
+      if(id) {
+        const foundUser = await getUser(id)
+        if(foundUser) {
+          setUser(foundUser)
+        }
+      }
+    }
   useEffect(() => {
-    setUserState(user)
+    
+    asyncGetUserCookie()
   }, [])
+  let navigate = useNavigate()
 
   return (
-    // <Context.Provider value={user}>
+     <Context.Provider value={[user, setUser]}>
     <div className="container">
-      {userState && <Navbar setUserState={setUserState} />}
-      {/* <div className="page"> */}
+      {user && <Navbar />}
         <Routes>
-          {/* <Route exact path="/" element={<Homepage/>}></Route> */}
-          {/* <Route exact path="/" element={user ? <Homepage /> : <Navigate to="/login" />}></Route> */}
           <Route path="/about" element={<About/>}></Route>
           <Route element={<PrivateRoutes/>}>
             <Route exact path="/" element={<Homepage/>}></Route>
-            <Route path="/editProfile" element={<EditProfile setUserState={setUserState}/>}></Route>
+            <Route path="/editProfile" element={<EditProfile changeName={value => setName(value)} />}></Route>
             <Route path="/friends" element={<Friends/>}></Route>
-            <Route path="*" element={<PageNotFound/>} />
+            <Route path="/movies/:movieID" element={<AboutMovie navigate={navigate}/>}></Route>
+            {/* <Route path="*" element={<PageNotFound/>} /> */}
           </Route>
-          {/* <Route path="/addFriends" element={<AddFriends/>}></Route> */}
           <Route element={<PrivateRoutesLogged/>}>
-            <Route path="/login" element={<Login setUserState={setUserState}/>}></Route>
+            <Route path="/login" element={<Login />}></Route>
             <Route path="/register" element={<Register/>}></Route>
           </Route>
         </Routes>
-        {/* </div> */}
-      {userState && <Footer />}
+      {user && <Footer />}
     </div>
-    // </Context.Provider>
+     </Context.Provider>
   );
 }
 

@@ -20,26 +20,17 @@ export const getUsers = async () => {
 export const addUser = async (name, username, password) => {
     try {
         await addDoc(userCollectionRef, {
-            name, username, password, friends: [], recs: []
+            name, username, password, friends: [], sentFriendReq: [], receivedFriendReq: [], sentMovies: [], receivedMovies: []
         })
     } catch (err) {
         console.log(err)
     }   
 }
 
-export const updateUser = async (id, name, password) => {
+export const updateUser = async (id, user) => {
     try {
         let docRef = doc(db, "users", id)
-        await updateDoc(docRef, {name, password})
-    } catch (err) {
-        console.log(err)
-    }   
-}
-
-export const updateUserFriends = async (id, friends) => {
-    try {
-        let docRef = doc(db, "users", id)
-        await updateDoc(docRef, {friends})
+        await updateDoc(docRef, {name: user.name, password: user.password, friends: user.friends, sentFriendReq: user.sentFriendReq, receivedFriendReq: user.receivedFriendReq, sentMovies: user.sentMovies, receivedMovies: user.receivedMovies})
     } catch (err) {
         console.log(err)
     }   

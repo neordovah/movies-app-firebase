@@ -1,12 +1,12 @@
-import { Outlet, useNavigate, Navigate } from "react-router";
-import { getCookie } from "./handle-user-cookie";
+import { Outlet, Navigate, useNavigate } from "react-router";
+import { useContext } from 'react';
+import Context from './context';
 
 const PrivateRoutes = () => {
-    let user = getCookie()
-    let navigate = useNavigate()
+    let [user, setUser] = useContext(Context)
 
     return (
-        user ? <Outlet/> : <Navigate to="/login"/>
+        user ? <Outlet /> : <Navigate to="/login"/>
     )
 }
 
