@@ -7,12 +7,28 @@
     align-items: center;
     padding-left: 20px;
     padding-right: 20px;
-   // gap: 20px;
+    .moviesList {
+        background-color: lightgray;
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%, 0);
+        top: 60px;
+        width: 440px;
+        padding: 20px;
+        .movieList {
+            height: 40px;
+            border-bottom: 1px solid darkgrey;
+            flex-direction: column;
+            justify-content: center;
+            display: flex;
+        }
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+    }
+
     .search {
         flex-wrap: nowrap;
-        // position: absolute;
-        // left: 50%;
-        // transform: translate(-50%, 0);
+        position: relative;
         > * {
             height: 34px;
             border: 0px;
@@ -29,6 +45,7 @@
             width: 35px;
             border-top-left-radius: 0px;
             border-bottom-left-radius: 0px;
+            cursor: default;
         }
     }
     @media (min-width: 500px) {
@@ -40,6 +57,7 @@
         }
         .userProfile {
             margin-right: 30px;
+            //margin-left: 20px;
         }
     }
 
@@ -60,6 +78,11 @@
                 position: relative;
             }
             margin-right: 20px;
+        }
+    }
+    @media (max-width: 500px) {
+        .moviesList {
+            width: 100%;
         }
     }
     // @media (max-width: 600px) {
@@ -134,11 +157,15 @@
         }
     }
 
+    .entireProfile {
+        margin-left: 20px;
+    }
+
     .dropdownMenu {
         // transition: 0.2s ;
         // transform: translateY(0%);
         //height: 60px;
-        position: fixed;
+        position: absolute;
         right: 20px;
         top: 60px;
         
@@ -146,7 +173,7 @@
         li {
             border-bottom: 1px solid grey;
             padding: 20px;
-           background-color: red;
+           background-color: white;
             
         }
         li:hover {

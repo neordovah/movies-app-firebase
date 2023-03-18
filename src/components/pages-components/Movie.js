@@ -10,7 +10,6 @@ function Movie(props) {
   let navigate = useNavigate()
 
   const handleMovie = () => {
-    console.log(movie)
     navigate(`/movies/${movie.id}`)
   }
 

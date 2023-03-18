@@ -55,7 +55,7 @@ function Friends() {
       if(userFriend) {
       //users.map(userFriend => {
         if(friend === userFriend.username) {
-          foundFriend = 1 ///inseamna ca exista userul in baza de date
+          foundFriend = 1 
           let isOkToSendFriendReq = 1
 
           if(friend === user.username) {
