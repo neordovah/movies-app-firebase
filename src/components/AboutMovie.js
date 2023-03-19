@@ -1,8 +1,8 @@
 import React, {useEffect, useState, useContext} from 'react'
 import { useParams } from 'react-router-dom'
-import "../../styles/AboutMovie.scss"
-import {getUsers, updateUser} from "../../firebase-users"
-import Context from '../../context';
+import "../styles/AboutMovie.scss"
+import {getUsers, updateUser} from "../firebase-users"
+import Context from '../context';
 
 function AboutMovie(props) {
 
@@ -37,11 +37,11 @@ function AboutMovie(props) {
 
     const [alert, setAlert] = useState({state: true, msg: "\u00A0"})
     let style = {
-        position: "relative",
-        color: "red",
-        top: "0px", 
+        position: "absolute",
+        color: "blue",
+        top: "-35px", 
         left: "50%",
-        transform: "translate(-50%)"
+        transform: "translate(-50%)",
       } 
 
     const [input, setInput] = useState("")
@@ -55,11 +55,11 @@ function AboutMovie(props) {
                 }
             })
         })
-        console.log(input)
+
         if(friend) {
             let alreadySent = 0
             friend?.receivedMovies?.map(receivedMovie => {
-                if(receivedMovie.from === user.username && receivedMovie.movie.id === movieID) {
+                if((receivedMovie.from == user.username) && (receivedMovie.movie.id == movieID)) {
                     alreadySent = 1
                 }
             })
@@ -72,9 +72,11 @@ function AboutMovie(props) {
             }
             else if(alreadySent === 0) {
                 console.log("not sent yet")
-                friend.receivedMovies.push({movie: movie, from: user.username})
+                let date = new Date().toLocaleDateString()
+                console.log(date)
+                friend.receivedMovies.push({movie: movie, from: user.username, date: date})
                 updateUser(friend.id, friend)
-                user.sentMovies.push({movie: movie, to: friend.username})
+                user.sentMovies.push({movie: movie, to: friend.username, date: date})
                 updateUser(user.id, user)
                 setAlert({state: true, msg: "Sent successfully!"})
                 setTimeout(() => {
@@ -89,25 +91,27 @@ function AboutMovie(props) {
         <>
         {!loading ? 
         <div className="pageAbMovie">
+            <div className="movie">
             <img  src={`https://www.themoviedb.org/t/p/w220_and_h330_face${movie.poster_path}`} width="300px"/>
+            <div className='movieInfo'>
             <h1>{movie && (movie?.title || movie?.name)}</h1>
             <h4>Release date: {movie?.release_date}</h4>  
             <p>{movie.overview}</p>
+            
+            {userState?.friends?.length > 0 ? 
             <div className="sendToFriend">
                 <div id="alert" style={style}>{alert.msg}</div> 
                 <p>Send this movie to a friend:</p>
                 <form>
                     {userState?.friends.map(friend => {
                         return (
-                            <div className="friendOption" key={friend}>
-                                <input onClick={() => setInput(friend)} type="radio" id={friend} name="friend" value={friend}></input>
-                                <label>{friend}</label>
-                            </div>
+                            <label><input onClick={() => setInput(friend)} type="radio" id={friend} name="friend" value={friend}></input>{friend}</label>
                         )
                     })}
                 </form>
                 <button className="sendMovie" onClick={() => handleSendMovie()}>Send movie</button>
-            </div>
+            </div> : <p className="addFriendsFirst">Add friends to send them movies to!</p>}
+            </div></div>
             <button className="backHome" onClick={(e) => handleBackHome(e)}>Go back</button>
         </div>
         : <h1>Loading...</h1>}

@@ -14,7 +14,7 @@ import PrivateRoutes from "../PrivateRoutes"
 import PrivateRoutesLogged from "../PrivateRoutesLogged"
 import {getCookie} from "../handle-user-cookie"
 import { getUser } from "../firebase-users";
-import AboutMovie from "./pages-components/AboutMovie";
+import AboutMovie from "./AboutMovie";
 import Notifications from "./Notifications"
 
 function App() {

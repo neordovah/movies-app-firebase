@@ -3,6 +3,7 @@ import "../../styles/Friends.scss"
 import Context from '../../context';
 import { useContext } from 'react';
 import { updateUser, getUsers } from '../../firebase-users'
+import { Link } from "react-router-dom";
 
 function Friend(props) {
 
@@ -36,7 +37,6 @@ let friend = null
                 return friend
             }
         })
-       // console.log(newFriends, friendFriends)
         props.setFriends(newFriends)
         let newUser = user
         newUser.friends = newFriends
@@ -45,7 +45,6 @@ let friend = null
         newFriend.friends = friendFriends
         updateUser(user.id, newUser)
         updateUser(friend.id, newFriend)
-       // console.log(user, friend)
         props.setUser(newUser)
     }
 
@@ -57,11 +56,33 @@ let friend = null
             <button onClick={(e) => handleDelete(e)}>delete</button>
         </span>
         {infoButton ? 
-            <div>
-                <p>Username:</p>
-                <p>Friend since:</p>
-                <p>Recommended you:</p>
-                <p>You recommended them:</p>
+            <div className='friendInfo'>
+                {/* <p>Friends since:</p> */}
+                Recommended you:
+                <div className='linksInfo'>
+                  {
+                    user?.receivedMovies.map(receivedMovie => {
+                      if(receivedMovie.from == props.friend) {
+                        return (
+                            <Link to={`/movies/${receivedMovie.movie.id}`}>{receivedMovie.movie.title || receivedMovie.movie.original_title}</Link>
+                        )
+                      }
+                    })
+                  }
+                  </div>
+                
+                You recommended them:
+                <div className='linksInfo'>
+                  {
+                    user?.sentMovies.map(sentMovie => {
+                      if(sentMovie.to == props.friend) {
+                        return (
+                            <Link to={`/movies/${sentMovie.movie.id}`}>{sentMovie.movie.title || sentMovie.movie.original_title}</Link>
+                        )
+                      }
+                    })
+                  }
+                  </div>
             </div>
         :null}
     </div>

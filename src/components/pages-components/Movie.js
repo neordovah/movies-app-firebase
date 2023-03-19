@@ -1,7 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import "../../styles/Movie.scss"
-import "./AboutMovie"
+import "../AboutMovie"
 
 function Movie(props) {
   
