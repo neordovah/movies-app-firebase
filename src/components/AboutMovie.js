@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom'
 import "../styles/AboutMovie.scss"
 import {getUsers, updateUser} from "../firebase-users"
 import Context from '../context';
+//require("dotenv").config()
 
 function AboutMovie(props) {
 
@@ -15,7 +16,7 @@ function AboutMovie(props) {
     const [userState, setUserState] = useState(user)
 
     const getMovie = () => {
-        fetch(`https://api.themoviedb.org/3/movie/${movieID}?api_key=a49657255c827cf52a3f7b9ebbd6571e&language=en-US`).then(result => result.json()).then(data => {
+        fetch(`https://api.themoviedb.org/3/movie/${movieID}?api_key=${process.env.REACT_APP_API_KEY}`).then(result => result.json()).then(data => {
             setMovie(data)
             setLoading(false)
         })
@@ -103,9 +104,9 @@ function AboutMovie(props) {
                 <div id="alert" style={style}>{alert.msg}</div> 
                 <p>Send this movie to a friend:</p>
                 <form>
-                    {userState?.friends.map(friend => {
+                    {userState?.friends.map((friend, index) => {
                         return (
-                            <label><input onClick={() => setInput(friend)} type="radio" id={friend} name="friend" value={friend}></input>{friend}</label>
+                            <label key={index}><input onClick={() => setInput(friend)} type="radio" id={friend} name="friend" value={friend}></input>{friend}</label>
                         )
                     })}
                 </form>

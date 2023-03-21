@@ -12,8 +12,8 @@ function Homepage() {
   // let moviesArray = null
 
   useEffect(() => {
-    fetch("https://api.themoviedb.org/3/trending/movie/day?api_key=a49657255c827cf52a3f7b9ebbd6571e").then(result => result.json()).then(data => {
-        let moviesTrunc = data.results.slice(0, 8)
+    fetch(`https://api.themoviedb.org/3/trending/movie/day?api_key=${process.env.REACT_APP_API_KEY}`).then(result => result.json()).then(data => {
+        let moviesTrunc = data.results.slice(0, 10)
         setMovies(moviesTrunc)
         // moviesArray = data
           //console.log(movies)

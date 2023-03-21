@@ -61,10 +61,10 @@ let friend = null
                 Recommended you:
                 <div className='linksInfo'>
                   {
-                    user?.receivedMovies.map(receivedMovie => {
+                    user?.receivedMovies.map((receivedMovie, index) => {
                       if(receivedMovie.from == props.friend) {
                         return (
-                            <Link to={`/movies/${receivedMovie.movie.id}`}>{receivedMovie.movie.title || receivedMovie.movie.original_title}</Link>
+                            <Link key={index} to={`/movies/${receivedMovie.movie.id}`}>{receivedMovie.movie.title || receivedMovie.movie.original_title}</Link>
                         )
                       }
                     })
@@ -74,10 +74,10 @@ let friend = null
                 You recommended them:
                 <div className='linksInfo'>
                   {
-                    user?.sentMovies.map(sentMovie => {
+                    user?.sentMovies.map((sentMovie, index) => {
                       if(sentMovie.to == props.friend) {
                         return (
-                            <Link to={`/movies/${sentMovie.movie.id}`}>{sentMovie.movie.title || sentMovie.movie.original_title}</Link>
+                            <Link key={index} to={`/movies/${sentMovie.movie.id}`}>{sentMovie.movie.title || sentMovie.movie.original_title}</Link>
                         )
                       }
                     })

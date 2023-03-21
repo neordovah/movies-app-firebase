@@ -53,7 +53,7 @@ function App() {
             <Route path="/friends" element={<Friends/>}></Route>
             <Route path="/notifications" element={<Notifications/>}></Route>
             <Route path="/movies/:movieID" element={<AboutMovie navigate={navigate} reloadInfo={reloadInfo} setReloadInfo={setReloadInfo}/>}></Route>
-            {/* <Route path="*" element={<PageNotFound/>} /> */}
+            <Route path="*" element={<PageNotFound/>} />
           </Route>
           <Route element={<PrivateRoutesLogged/>}>
             <Route path="/login" element={<Login />}></Route>

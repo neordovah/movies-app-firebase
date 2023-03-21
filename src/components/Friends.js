@@ -5,6 +5,7 @@ import { getUsers, updateUser } from '../firebase-users'
 import { useContext } from 'react';
 import Context from '../context';
 import AccFriend from './pages-components/AccFriend';
+import RefreshButton from './pages-components/RefreshButton';
 
 function Friends() {
 
@@ -129,6 +130,7 @@ function Friends() {
       <div id="alert" style={style}>{alert.msg}</div>  
         <h3>Add friend:</h3>
         <input name="friend" value={friend} autoComplete="off" onChange={(e) => setFriend(e.target.value)} placeholder='Enter a username'/>
+        <RefreshButton/>
         <button onClick={(e) => handleFindFriend(e)}>Send friend request</button>
       </span>
       <div className='friends'>

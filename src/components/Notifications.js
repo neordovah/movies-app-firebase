@@ -2,6 +2,7 @@ import React, {useContext, useEffect, useState} from 'react'
 import Context from '../context';
 import "../styles/Notifications.scss"
 import { Link } from "react-router-dom";
+import RefreshButton from './pages-components/RefreshButton';
 
 function Notifications() {
 
@@ -15,8 +16,8 @@ function Notifications() {
 
   return (
     <div className="notifPage">
-      <h2>History of received movies</h2>
-      {notifications ? notifications?.map((notif, index) => {
+      <h2>History of received movies <RefreshButton/></h2>
+      {notifications ? notifications?.reverse().map((notif, index) => {
         return (
           <div className="notification" key={index}>
             <p>{notif.date}</p> 

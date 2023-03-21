@@ -5,7 +5,7 @@ import "../../styles/Navbar.scss"
 import Context from "../../context";
 import { setCookie } from "../../handle-user-cookie";
 import Cookies from "js-cookie";
-import { hasSelectionSupport } from "@testing-library/user-event/dist/utils";
+
 
 function  Navbar(props) {
 
@@ -49,7 +49,7 @@ function  Navbar(props) {
   const style = {
     color: "white",
     cursor: "pointer",
-   // paddingRight: "20px"
+
   } 
 
   const [moviesSearch, setMoviesSearch] = useState([])
@@ -61,7 +61,7 @@ function  Navbar(props) {
       setMoviesSearch([])
     }
     if(input?.length > 0) {
-        fetch(`https://api.themoviedb.org/3/search/movie?api_key=a49657255c827cf52a3f7b9ebbd6571e&query=${search}`).then(response => response.json()).then(data => {
+        fetch(`https://api.themoviedb.org/3/search/movie?api_key=${process.env.REACT_APP_API_KEY}&query=${search}`).then(response => response.json()).then(data => {
         data = data.results
         setMoviesSearch([])
         let moviesArray = []
@@ -93,9 +93,9 @@ function  Navbar(props) {
         <button><AiOutlineSearch /></button>
       </span>
       <span className={(moviesSearch?.length > 0) ? "moviesList" : null}>
-        {moviesSearch.map(movie => {
+        {moviesSearch.map((movie, index) => {
           return (
-            <div className="movieList">
+            <div className="movieList" key={index}>
               <Link onClick={() => {
                 props.setReloadInfo(!props.reloadInfo)
                 setSearch("")
